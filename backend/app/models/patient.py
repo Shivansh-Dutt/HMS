@@ -10,4 +10,6 @@ class Patient(BaseModel):
     contact = db.Column(db.String(20))
     address = db.Column(db.Text)
     
-    appointments = db.relationship("Appointment",backref="patient")
+    # appointments = db.relationship("Appointment",backref="patient")
+    
+    appointments = db.relationship("Appointment",back_populates="patient")

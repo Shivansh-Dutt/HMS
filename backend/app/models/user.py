@@ -8,5 +8,8 @@ class User(BaseModel):
     password = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(20), nullable=False)
     
-    doctor = db.relationship("Doctor",backref="user", uselist=False)
-    patient = db.relationship("Patient", backref="user", uselist=False)
+    # doctor = db.relationship("Doctor",backref="user", uselist=False)
+    # patient = db.relationship("Patient", backref="user", uselist=False)
+    
+    doctor = db.relationship("Doctor",back_populates="user",uselist=False)
+    patient = db.relationship("Patient",back_populates="user",uselist=False)

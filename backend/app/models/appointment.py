@@ -12,7 +12,12 @@ class Appointment(BaseModel):
     
     status = db.Column(db.String(20), default="BOOKED")
     
-    treatment = db.relationship("Treatment", backref="appointment", uselist=False)
+    # treatment = db.relationship("Treatment", backref="appointment", uselist=False)
+    
+    doctor = db.relationship("Doctor", back_populates="appointments")
+    patient = db.relationship("Patient",back_populates="appointments")
+    
+    treatment = db.relationship("Treatment", back_populates="appointment",uselist=False)
     
     __table_args__ = (
         db.UniqueConstraint(

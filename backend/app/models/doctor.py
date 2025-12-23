@@ -10,5 +10,7 @@ class Doctor(BaseModel):
     specialization = db.Column(db.String(100))
     availablity = db.Column(db.JSON)
     
-    appointments = db.relationship("Appointment", backref="doctor")
-    
+    # appointments = db.relationship("Appointment", backref="doctor")
+
+    appointments = db.relationship("Appointment", back_populates="doctor")    
+    department = db.relationship("Department",back_populates="doctors")
