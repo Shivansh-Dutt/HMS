@@ -13,3 +13,4 @@ class Patient(BaseModel):
     # appointments = db.relationship("Appointment",backref="patient")
     
     appointments = db.relationship("Appointment",back_populates="patient")
+    user = db.relationship("User",back_populates="patient",uselist=False)

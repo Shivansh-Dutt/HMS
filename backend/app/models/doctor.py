@@ -14,3 +14,4 @@ class Doctor(BaseModel):
 
     appointments = db.relationship("Appointment", back_populates="doctor")    
     department = db.relationship("Department",back_populates="doctors")
+    user = db.relationship("User",back_populates="doctor")
