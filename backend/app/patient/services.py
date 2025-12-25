@@ -3,6 +3,9 @@ from datetime import date
 from app.extensions import db
 from app.models import User, Patient, Appointment, Doctor
 from sqlalchemy.exc import IntegrityError
+from app.tasks.exports import export_patient_history
+from app.appointments.services import change_status
+from app.appointments.validators import is_slot_available
 
 def register_patient(data):
     if User.query.filter_by(email=data["email"]).first():
@@ -76,6 +79,9 @@ def search_available_doctors(query):
 def book_appointment(user_id,data):
     patient = Patient.query.filter_by(user_id=user_id).first_or_404()
     
+    if not is_slot_available(data["doctor_id"], data["date"], data["time"]):
+        raise ValueError("Slot already booked")
+
     appointment = Appointment(
         doctor_id=data["doctor_id"],
         patient_id=patient.id,
@@ -101,7 +107,8 @@ def cancel_appointment(user_id, appointment_id):
         status = "BOOKED"
     ).first_or_404()
     
-    appointment.status= "CANCELLED"
+    # appointment.status= "CANCELLED"
+    change_status(appointment, "CANCELLED")
     db.session.commit()
     
     return {"message": "Appointment cancelled"}
@@ -122,3 +129,10 @@ def get_patient_history(user_id):
         }
         for a in appointments
     ]
+    
+def export_history_of_patient(user_id):
+    patient = Patient.query.filter_by(user_id=user_id).first_or_404()
+    
+    export_patient_history.delay(patient.id)
+    
+    return {"message": "Export started. You will be notified"}

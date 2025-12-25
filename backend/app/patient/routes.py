@@ -4,7 +4,7 @@ from app.auth.decorators import role_required
 from app.patient.services import register_patient
 from app.patient.services import get_patient_dashboard
 from app.patient.services import search_available_doctors
-from app.patient.services import book_appointment,cancel_appointment,get_patient_history
+from app.patient.services import book_appointment,cancel_appointment,get_patient_history,export_history_of_patient
 
 patient_bp = Blueprint("patient",__name__, url_prefix="/patient")
 
@@ -50,3 +50,11 @@ def cancel(appointment_id):
 def history():
     user_id = get_jwt_identity()
     return jsonify(get_patient_history(user_id))
+
+
+@patient_bp.route("/export", methods=["POST"])
+@jwt_required()
+@role_required("PATIENT")
+def export_history():
+    user_id = get_jwt_identity()
+    return jsonify(export_history_of_patient(user_id))

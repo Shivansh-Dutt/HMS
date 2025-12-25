@@ -1,6 +1,7 @@
 from datetime import date
 from app.models import Doctor, Appointment , Patient ,Treatment
 from app.extensions import db
+from app.appointments.services import change_status
 
 def get_upcoming_appointments(user_id):
     doctor = Doctor.query.filter_by(user_id=user_id, is_active=True).first_or_404()
@@ -51,7 +52,8 @@ def update_appointment_status(user_id, appointment_id):
         doctor_id=doctor.id
     ).first_or_404
     
-    appointment.status = "COMPLETED"
+    # appointment.status = "COMPLETED"
+    change_status(appointment, "COMPLETED")
     db.session.commit()
     
     return {"message": "Appointment marked as completed"}
