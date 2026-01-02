@@ -10,3 +10,12 @@ def get_all_departments():
         }
         for d in departments
     ]
+
+def get_department(dept_id):
+    department = Department.query.get(dept_id)
+    print(department)
+    
+    return {
+        "name": department.name,
+        "overview": department.description
+    }

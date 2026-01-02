@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.auth.services import login_user
-from flask_jwt_extended import set_access_cookies,jwt_required, get_jwt,get_jwt_identity
+from flask_jwt_extended import set_access_cookies,jwt_required, get_jwt,get_jwt_identity, unset_jwt_cookies
 from app.models import User
 auth_bp = Blueprint("auth",__name__,url_prefix="/auth")
 
@@ -36,3 +36,10 @@ def me():
         "role": claims.get("role"),
         "email": user.email
     }), 200
+    
+
+@auth_bp.route("/logout", methods=["POST"])
+def logout():
+    resp = jsonify({"logout": True})
+    unset_jwt_cookies(resp)
+    return resp, 200

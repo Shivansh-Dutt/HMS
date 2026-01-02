@@ -5,6 +5,8 @@ from app.patient.services import register_patient
 from app.patient.services import get_patient_dashboard
 from app.patient.services import search_available_doctors
 from app.patient.services import book_appointment,cancel_appointment,get_patient_history,export_history_of_patient
+from app.services.department_service import get_department
+from app.services.doctor_service import get_department_doctors
 
 patient_bp = Blueprint("patient",__name__, url_prefix="/patient")
 
@@ -20,14 +22,21 @@ def dashboard():
     user_id = get_jwt_identity()
     return jsonify(get_patient_dashboard(user_id))
 
+@patient_bp.route("/department/<int:id>", methods=["GET"])
+@jwt_required()
+@role_required("PATIENT")
+def department_details(id):
+    return jsonify({
+        "department_detail" : get_department(id),
+        "department_doctors"  : get_department_doctors(id)
+        })
+
 @patient_bp.route("/doctors/search", methods=["GET"])
 @jwt_required()
 @role_required("PATIENT")
 def search_doctors():
     query = request.args.get("q", "")
     return jsonify(search_available_doctors(query))
-
-from app.patient.services import book_appointment
 
 @patient_bp.route("/appointments", methods=["POST"])
 @jwt_required()

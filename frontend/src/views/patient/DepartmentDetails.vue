@@ -29,7 +29,7 @@
         :key="doctor.id"
       >
         <span class="doctor-name">
-          {{ doctor.name }}
+          {{ doctor.email }}
         </span>
 
         <div class="doctor-actions">
@@ -58,6 +58,8 @@
 </template>
 
 <script>
+import api from '@/api/axios';
+
 export default {
   name: "DepartmentDetails",
 
@@ -77,10 +79,14 @@ export default {
     };
   },
 
-  created() {
+  async created() {
     const deptId = this.$route.params.id;
     console.log("Department ID:", deptId);
     // 🔹 fetch department & doctors using deptId (API later)
+    const departmentRes = await api.get(`/patient/department/${deptId}`)
+    this.department = departmentRes.data.department_detail
+    this.doctors = departmentRes.data.department_doctors
+    console.log(departmentRes.data.department_doctors)
   },
 
   methods: {
@@ -99,7 +105,7 @@ export default {
 
     viewDoctorDetails(doctorId) {
       console.log("View doctor details:", doctorId);
-      // this.$router.push(`/doctor/${doctorId}`)
+      this.$router.push(`/doctor/${doctorId}`)
     }
   }
 };

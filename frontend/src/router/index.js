@@ -8,6 +8,7 @@ import PatientDashboard from "@/views/patient/AppDashboard.vue"
 import PatientRegister from "@/views/patient/PatientRegister.vue"
 import CreateDoctorForm from "@/views/admin/CreateDoctorForm.vue"
 import DepartmentDetails from "@/views/patient/DepartmentDetails.vue"
+import DoctorDetails from "@/views/patient/DoctorDetails.vue"
 
 Vue.use(Router)
 
@@ -19,7 +20,8 @@ const router = new Router({
     { path: "/admin", component: AdminDashboard, meta: { role: "ADMIN" }},
     { path: "/doctor", component: DoctorDashboard, meta: { role: "DOCTOR" }},
     { path: "/patient", component: PatientDashboard, meta: { role: "PATIENT" }},
-    { path: "/department/:id", component: DepartmentDetails }
+    { path: "/department/:id", component: DepartmentDetails },
+    { path: "/doctor/:id", component: DoctorDetails }
   ]
 })
 

@@ -65,7 +65,9 @@ const actions = {
       commit("SET_LOADED", true)
     }
   },
-  logout({ commit }) {
+  async logout({ commit }) {
+    const res = await api.post("/auth/logout")
+    console.log(res.data)
     commit("LOGOUT")
   }
 }
