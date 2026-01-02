@@ -18,5 +18,6 @@ def login_user(email, password):
     
     return {
         "access_token": token,
-        "role": user.role
+        "role": user.role,
+        "email": user.email
     }

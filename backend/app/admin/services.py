@@ -1,12 +1,15 @@
 from werkzeug.security import generate_password_hash
 from app.extensions import db
-from app.models import User,Doctor,Patient,Appointment,Department
+from app.models import User,Doctor,Patient,Department
+from app.services.patient_service import get_all_patients
+from app.services.doctor_service import get_all_doctors
+from app.services.appointment_service import get_all_appointments
 
-def dashboard_stats():
+def get_admin_dashboard():
     return {
-        "total_doctors": Doctor.query.filter_by(is_active=True).count(),
-        "total_patients": Patient.query.filter_by(is_active=True).count(),
-        "total_appointments": Appointment.query.count()
+        "total_doctors": get_all_doctors(),
+        "total_patients": get_all_patients(),
+        "upcoming_appointments": get_all_appointments()
     }
     
 def create_doctor(data):
@@ -27,14 +30,14 @@ def create_doctor(data):
     doctor = Doctor(
         user_id = user.id,
         specialization=data.get("specialization"),
-        department_id=department,
+        department_id=department.id,
         availablity={}
     )
     
     db.session.add(doctor)
     db.session.commit()
     
-    return {"message": "Doctor created successfully"}
+    return {"message": "Doctor created successfully"} , 201
 
 def search_doctors(query):
     doctors = (
@@ -42,7 +45,7 @@ def search_doctors(query):
         .join(User)
         .filter(
             User.email.ilike(f"%{query}%"),
-            Doctor.is_active == True
+            Doctor.is_active
         )
         .all()
     )
@@ -62,7 +65,7 @@ def search_patients(query):
         .join(User)
         .filter(
             User.email.ilike(f"%{query}%"),
-            Patient.is_active == True
+            Patient.is_active
         )
         .all()
     )

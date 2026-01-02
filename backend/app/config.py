@@ -8,6 +8,9 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     JWT_SECRET_KEY = "jwt-secret"
+    JWT_TOKEN_LOCATION = ["cookies"]  # <- read JWT from cookie
+    JWT_COOKIE_SECURE = False         # True if using HTTPS
+    JWT_ACCESS_COOKIE_PATH = "/"
     
     CACHE_TYPE = "RedisCache"
     CACHE_REDIS_HOST = "localhost"

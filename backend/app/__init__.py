@@ -12,7 +12,7 @@ def create_app():
     app.config.from_object(Config)
     
     # Enable CORS for all routes
-    CORS(app, resources={r"/*": {"origins":"*"}})
+    CORS(app, resources={r"/*": {"origins":"*"}},supports_credentials=True)
     
     db.init_app(app)
     jwt.init_app(app)

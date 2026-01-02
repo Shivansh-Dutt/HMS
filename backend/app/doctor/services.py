@@ -1,5 +1,5 @@
 from datetime import date
-from app.models import Doctor, Appointment , Patient ,Treatment
+from app.models import Doctor, Appointment ,Treatment
 from app.extensions import db
 from app.appointments.services import change_status
 
